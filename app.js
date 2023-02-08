@@ -10,14 +10,14 @@ const session=require('express-session');
 const flash=require('connect-flash');
 const ExpressError=require('./utils/ExpressError');
 const methodOverride=require('method-override');
+const passport=require('passport');
+const localStrategy=require('passport-Local');
 const User=require('./models/user');
 const mongoSanitize=require('express-mongo-sanitize');
 const helmet=require("helmet");
 const MongoStore=require("connect-mongo");
 
 
-const passport=require('passport');
-const localStrategy=require('passport-Local');
 
 // Routes
 const users=require('./routes/users');
