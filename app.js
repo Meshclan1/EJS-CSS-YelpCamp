@@ -18,21 +18,15 @@ const helmet=require("helmet");
 const MongoStore=require("connect-mongo");
 
 
-
 // Routes
 const users=require('./routes/users');
 const campgrounds=require('./routes/campgrounds');
 const reviews=require('./routes/reviews');
 
 
-// const dbUrl=process.env.DB_URL;
-// 'mongodb://localhost:27017/yelp-camp'
-// const dbUrl='mongodb://localhost:27017/yelp-camp';
 
-const dbUrl=process.env.DB_URL||'mongodb://localhost:27017/yelp-camp';
-const secret=process.env.SECRET||'thisshouldbeabettersecret'
-
-// const dbUrl=process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+const dbUrl='mongodb://localhost:27017/yelp-camp';
+// const dbUrl=process.env.DB_URL||'mongodb://localhost:27017/yelp-camp';
 
 mongoose.set('strictQuery', false)
 mongoose.connect(dbUrl).
@@ -72,14 +66,7 @@ app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
 
-
-// const store=MongoStore.create({
-//     mongoUrl: dbUrl,
-//     touchAfter: 24*60*60,
-//     crypto: {
-//         secret: 'squirrel'
-//     }
-// });
+const secret=process.env.SECRET||'thisshouldbeabettersecret'
 
 const sessionConfig={
     store: MongoStore.create({
@@ -101,21 +88,6 @@ const sessionConfig={
     }
 }
 app.use(session(sessionConfig));
-
-// const sessionConfig={
-//     name: 'session',
-//     secret: 'thisisabadsecret',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookies: {
-//         HttpOnly: true,
-//         // secure: true,
-//         expires: Date.now()+1000*60*60*24*7,
-//         maxAge: 1000*60*60*24*7
-//     }
-// }
-
-// app.use(session(sessionConfig));
 app.use(flash());
 app.use(helmet())
 
@@ -127,18 +99,6 @@ const scriptSrcUrls=[
     "https://cdnjs.cloudflare.com/",
     "https://cdn.jsdelivr.net",
 ];
-
-
-// const styleSrcUrls=[
-//     "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css",
-//     "https://kit-free.fontawesome.com/",
-//     "https://stackpath.bootstrapcdn.com/",
-//     "https://api.mapbox.com/",
-//     "https://api.tiles.mapbox.com/",
-//     "https://fonts.googleapis.com/",
-//     "https://use.fontawesome.com/",
-// ];
-
 
 const styleSrcUrls=[
     "https://kit-free.fontawesome.com/",
@@ -194,23 +154,14 @@ app.use((req, res, next) => {
     next();
 })
 
-
-// console.log(req.path, req.originalUrl)
-
-
-
 // Route handlers!
 app.use('/campgrounds', campgrounds);
 app.use('/campgrounds/:id/reviews', reviews);
 app.use('/', users);
 
-
-
 app.get('/', (req, res) => {
     res.render('home')
 });
-
-
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found..', 404))

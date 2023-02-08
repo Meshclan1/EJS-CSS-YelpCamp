@@ -29,10 +29,6 @@
                 </div>
             </div>
 
-            <!-- <div class="mb-3">
-                <label class="form-label" for="image"> Add images</label>
-                <input type="file" name="image" multiple>
-            </div> -->
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea class="form-control" type="text" id="description" name="campground[description]"
@@ -45,16 +41,6 @@
                 <input class="form-control" type="file" id="image" name="image" multiple>
                 <label for="image" class="custom-file-label text-muted"></label>
             </div>
-
-            <!-- <div class="mb-3">
-                <% campground.images.forEach(function(img, i) {  %>
-                <img src="<%=img.thumbnail %>" class="img-thumbnail" alt="">
-                <div class="form-check-inline">
-                    <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
-                </div>
-                <label for="image-<%=i%>">Delete?</label>
-                <% })%>
-            </div> -->
 
             <h5> Delete Images </h5>
             <div class="row row-cols-1 row-cols-md-4 g-4 mb-3">
