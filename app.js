@@ -1,9 +1,6 @@
 if (process.env.NODE_ENV!=="production") {
     require('dotenv').config();
 }
-// require('dotenv').config();
-
-
 
 const express=require("express");
 const path=require('path');
@@ -26,28 +23,43 @@ const localStrategy=require('passport-Local');
 const users=require('./routes/users');
 const campgrounds=require('./routes/campgrounds');
 const reviews=require('./routes/reviews');
-// const { triggerAsyncId } = require("async_hooks");
-// const { serializeUser } = require("passport");
+
 
 // const dbUrl=process.env.DB_URL;
-
 // 'mongodb://localhost:27017/yelp-camp'
+// const dbUrl='mongodb://localhost:27017/yelp-camp';
 
 const dbUrl=process.env.DB_URL||'mongodb://localhost:27017/yelp-camp';
+const secret=process.env.SECRET||'thisshouldbeabettersecret'
+
+// const dbUrl=process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
 
 mongoose.set('strictQuery', false)
-mongoose.connect(dbUrl,
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => {
-        console.log("Mongo Connection Open!!")
-    })
-    .catch(err => {
-        console.log("Oh no Mongo connection error..")
-        console.log(err)
-    })
+mongoose.connect(dbUrl).
+    catch(error => handleError(error));
+
+
+const db=mongoose.connection;
+db.on('error', console.error.bind(console, 'Oh no Mongo connection error..'));
+db.once('open', () => {
+    console.log('Mongo Connection Open!!');
+});
+
+
+
+// mongoose.set('strictQuery', false)
+// mongoose.connect(dbUrl,
+//     {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true
+//     })
+//     .then(() => {
+//         console.log("Mongo Connection Open!!")
+//     })
+//     .catch(err => {
+//         console.log("Oh no Mongo connection error..")
+//         console.log(err)
+//     })
 
 const app=express();
 
@@ -69,14 +81,16 @@ app.use(mongoSanitize());
 //     }
 // });
 
-
 const sessionConfig={
     store: MongoStore.create({
         mongoUrl: dbUrl,
-        touchAfter: 24*60*60 // time period in seconds
+        crypto: {
+            secret,
+        },
+        touchAfter: 24*3600 // time period in seconds
     }),
     name: 'session',
-    secret: "thisissecret",
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
