@@ -1,8 +1,9 @@
 // // Getting geo data based on seed location using Geocoding
 // // Add the following code at the top so Seeds index can read the ENV file
-// if (process.env.NODE_ENV!=="production") {
-//     require('dotenv').config();
-// }
+
+if (process.env.NODE_ENV!=="production") {
+    require('dotenv').config();
+}
 
 const mongoose=require('mongoose');
 const cities=require('./cities');
@@ -15,19 +16,33 @@ const Campground=require('../models/campground');
 // const mapBoxToken=process.env.MAPBOX_TOKEN;
 // const geocoder=mbxGeocoding({ accessToken: mapBoxToken });
 
+// mongoose.set('strictQuery', false)
+// mongoose.connect('mongodb://localhost:27017/yelp-camp',
+//     {
+//         useNewUrlParser: true,
+//         useUnifiedTopology: true
+//     })
+//     .then(() => {
+//         console.log("Mongo Connection Open!!")
+//     })
+//     .catch(err => {
+//         console.log("Oh no Mongo connection error..")
+//         console.log(err)
+//     })
+
+
+const dbUrl=process.env.DB_URL||'mongodb://localhost:27017/yelp-camp';
+
 mongoose.set('strictQuery', false)
-mongoose.connect('mongodb://localhost:27017/yelp-camp',
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
-    .then(() => {
-        console.log("Mongo Connection Open!!")
-    })
-    .catch(err => {
-        console.log("Oh no Mongo connection error..")
-        console.log(err)
-    })
+mongoose.connect(dbUrl).
+    catch(error => handleError(error));
+
+
+const db=mongoose.connection;
+db.on('error', console.error.bind(console, 'Oh no Mongo connection error..'));
+db.once('open', () => {
+    console.log('Mongo Connection Open!!');
+});
 
 
 const sample=array => array[Math.floor(Math.random()*array.length)];
