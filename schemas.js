@@ -1,4 +1,4 @@
-const BaseJoi=require('joi');
+const BaseJoi=require('joi'); // Used for validations by defining schema
 const sanitizeHtml=require('sanitize-html');
 
 const extension=(joi) => ({
