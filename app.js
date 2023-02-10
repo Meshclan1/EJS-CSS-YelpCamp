@@ -180,12 +180,6 @@ app.use('/campgrounds/:id/reviews', reviews);
 app.use('/', users);
 
 
-app.get('/results', async (req, res) => {
-    const { search_query }=req.query
-    const campgrounds=await Campground.find({ title: { $regex: search_query, $options: "i" } })
-    res.render('search.ejs', { campgrounds, search_query })
-})
-
 
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page not found..', 404))
