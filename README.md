@@ -16,5 +16,3 @@
 
 Yelp Camp is a web application that allows you to view campgrounds with a short description. Once you login or signup you will be able to create your own campgrounds that will include a title, an image, an address, and a short description. Please explore the beautiful world through my custom-built website
 
-
-<h3> Project Images </h3>
